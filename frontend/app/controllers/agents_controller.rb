@@ -229,11 +229,13 @@ class AgentsController < ApplicationController
       end
     end
   end
+
   def merge_detail
     request = JSONModel(:merge_request_detail).new
     request.target = {'ref' => JSONModel(@agent_type).uri_for(params[:id])}
     request.victims = Array.wrap({ 'ref' => params['victim_uri'] })
     request.selections = cleanup_params_for_schema(params['agent'], JSONModel(@agent_type).schema)
+
     uri = "#{JSONModel::HTTP.backend_url}/merge_requests/agent_detail"
     if params["dry_run"]
       uri += "?dry_run=true"
@@ -244,11 +246,10 @@ class AgentsController < ApplicationController
     else
       begin
         response = JSONModel::HTTP.post_json(URI(uri), request.to_json)
-        if response.message === "OK"
-          flash[:success] = I18n.t("agent._frontend.messages.merged")
-          resolver = Resolver.new(request.target["ref"])
-          redirect_to(resolver.view_uri)
-        end
+
+        flash[:success] = I18n.t("agent._frontend.messages.merged")
+        resolver = Resolver.new(request.target["ref"])
+        redirect_to(resolver.view_uri)
       rescue ValidationException => e
         flash[:error] = e.errors.to_s
         redirect_to({:action => :show, :id => params[:id]}.merge(extra_params))

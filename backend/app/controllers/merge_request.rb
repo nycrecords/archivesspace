@@ -1,5 +1,7 @@
 class ArchivesSpaceService < Sinatra::Base
 
+  RESOLVE_LIST = ["subjects", "related_resources", "linked_agents", "revision_statements", "container_locations", "digital_object", "classifications", "related_agents", "resource", "parent", "creator", "linked_instances", "linked_records", "related_accessions", "linked_events", "linked_events::linked_records", "linked_events::linked_agents", "top_container", "container_profile", "location_profile", "owner_repo", "agent_places", "agent_occupations", "agent_functions", "agent_topics", "agent_resources", "places"]
+
   Endpoint.post('/merge_requests/subject')
     .description("Carry out a merge request against Subject records")
     .params(["merge_request",
@@ -144,6 +146,7 @@ curl -H 'Content-Type: application/json' \\
   do
     target, victims = parse_references(params[:merge_request_detail])
     selections = parse_selections(params[:merge_request_detail].selections)
+
     if (victims.map {|r| r[:type]} + [target[:type]]).any? {|type| !AgentManager.known_agent_type?(type)}
       raise BadParamsException.new(:merge_request_detail => ["Agent merge request can only merge agent records"])
     end
@@ -153,21 +156,34 @@ curl -H 'Content-Type: application/json' \\
     if params[:dry_run]
       target = agent_model.to_jsonmodel(target)
       victim = agent_model.to_jsonmodel(victim)
-      new_target = merge_details(target, victim, selections, true)
-      result = new_target
+      new_target = merge_details(target, victim, selections, params)
+      result = resolve_references(new_target, RESOLVE_LIST)
+
+      json_response(resolve_references(result, RESOLVE_LIST))
     else
       target_json = agent_model.to_jsonmodel(target)
       victim_json = agent_model.to_jsonmodel(victim)
-      new_target = merge_details(target_json, victim_json, selections, false)
+      new_target = merge_details(target_json, victim_json, selections, params)
+
       target.assimilate((victims.map {|v|
                                        AgentManager.model_for(v[:type]).get_or_die(v[:id])
                                      }))
+
+      #update lock version which may have happened during call to #assimilate
+      target_json_updated = agent_model.to_jsonmodel(target)
+      new_target['lock_version'] = target_json_updated['lock_version']
+
       if selections != {}
-        target.update_from_json(new_target)
+        begin
+          target.update_from_json(new_target)
+        rescue => e
+          STDERR.puts "EXCEPTION!"
+          STDERR.puts e.message
+        end
       end
+
       json_response(:status => "OK")
     end
-    json_response(resolve_references(result, ['related_agents']))
   end
 
   Endpoint.post('/merge_requests/resource')
@@ -260,9 +276,50 @@ curl -H 'Content-Type: application/json' \\
     path.pop
     return all_values
   end
-  def merge_details(target, victim, selections, dry_run)
+
+  # when merging, set the agent id foreign key (e.g, agent_person_id, agent_family_id...) from the victim to the target
+  def set_agent_id(target_id, subrecord)
+    if subrecord['agent_person_id']
+      subrecord['agent_person_id'] = target_id
+
+    elsif subrecord['agent_family_id']
+      subrecord['agent_family_id'] = target_id
+
+    elsif subrecord['agent_corporate_entity_id']
+      subrecord['agent_corporate_entity_id'] = target_id
+
+    elsif subrecord['agent_software_id']
+      subrecord['agent_software_id'] = target_id
+
+    # this section updates related_agents ids
+    elsif subrecord['agent_person_id_0']
+      subrecord['agent_person_id_0'] = target_id
+      
+    elsif subrecord['agent_family_id_0']
+      subrecord['agent_family_id_0'] = target_id
+
+    elsif subrecord['agent_corporate_entity_id_0']
+      subrecord['agent_corporate_entity_id_0'] = target_id
+    end
+    
+  end
+
+  def merge_details(target, victim, selections, params)
     target[:linked_events] = []
     victim[:linked_events] = []
+
+    subrec_add_replacements = []
+    field_replacements = []
+    victim_values = {}
+    values_from_params = params[:merge_request_detail].selections
+
+    # this code breaks selections into arrays like this:
+    # ["agent_record_identifiers", 1, "append"] // add entire subrec
+    # ["agent_record_controls", 0, "replace"] // replace entire subrec
+    # ["agent_record_controls", 0, "maintenance_status_enum"] // replace field
+    # ["agent_record_controls", 0, "publication_status_enum"] // replace field
+    # ["agent_record_controls", 0, "maintenance_agency"]
+    # and then creates data structures for the subrecords to append, replace entirely, and replace by field.
     selections.each_key do |key|
       path = key.split(".")
       path_fix = []
@@ -274,50 +331,136 @@ curl -H 'Content-Type: application/json' \\
         end
         path_fix.push(part)
       end
-      path_fix_length = path_fix.length
-      if path_fix[0] != 'related_agents' && path_fix[0] != 'external_documents' && path_fix[0] != 'notes'
-        case path_fix_length
-          when 1
-            target[path_fix[0]] = victim[path_fix[0]]
-          when 2
-            target[path_fix[0]][path_fix[1]] = victim[path_fix[0]][path_fix[1]]
-          when 3
-            begin
-              if target[path_fix[0]].length <= path_fix[1]
-                target[path_fix[0]].push(victim[path_fix[0]][path_fix[1]])
-              end
-              target[path_fix[0]][path_fix[1]][path_fix[2]] = victim[path_fix[0]][path_fix[1]][path_fix[2]]
-            rescue
-              if target[path_fix[0]] === []
-                target[path_fix[0]].push(victim[path_fix[0]][path_fix[1]])
-              end
-            end
-          when 4
-            target[path_fix[0]][path_fix[1]][path_fix[2]][path_fix[3]] = victim[path_fix[0]][path_fix[1]][path_fix[2]][path_fix[3]]
-          when 5
-            begin
-              target[path_fix[0]][path_fix[1]][path_fix[2]][path_fix[3]][path_fix[4]] = victim[path_fix[0]][path_fix[1]][path_fix[2]][path_fix[3]][path_fix[4]]
-            rescue
-              if target[path_fix[0]] === []
-                target[path_fix[0]].push(victim[path_fix[0]][path_fix[1]])
-              elsif target[path_fix[0]][path_fix[1]][path_fix[2]] === []
-                target[path_fix[0]][path_fix[1]][path_fix[2]].push(victim[path_fix[0]][path_fix[1]][path_fix[2]][path_fix[3]])
-              end
-            end
-        end
-      elsif path_fix[0] === 'external_documents'
-        target['external_documents'].push(victim['external_documents'][path_fix[1]])
-      elsif path_fix[0] === 'notes'
-        target['notes'].push(victim['notes'][path_fix[1]])
+
+      subrec_name = path_fix[0]
+      victim_values[subrec_name] = values_from_params[subrec_name]
+
+      # subrec level add/replace 
+      if path_fix[2] == "append" || path_fix[2] == "replace"
+        subrec_add_replacements.push(path_fix)
+
+      # field level replace
+      else
+        field_replacements.push(path_fix)
       end
-      target['title'] = target['names'][0]['sort_name']
     end
-    if dry_run == true
-      target['title'] = preview_sort_name(target['names'][0])
-      target['names'][0]['sort_name'] = target['title']
-      target['related_agents'] = (target['related_agents'] + victim['related_agents']).uniq
-    end
+
+    merge_details_subrec(target, victim, subrec_add_replacements, victim_values)
+    merge_details_replace_field(target, victim, field_replacements, victim_values)
+
+    target['title'] = target['names'][0]['sort_name']
     target
+  rescue => e
+    STDERR.puts "EXCEPTION!"
+    STDERR.puts e.inspect
+
+  end
+
+  # do field replace operations
+  def merge_details_replace_field(target, victim, selections, values)
+    selections.each do |path_fix|
+      subrec_name = path_fix[0]
+      # this is the index of the order the user arranged the subrecs in the form, not the order of the subrecords in the DB.
+      ind         = path_fix[1]
+      field       = path_fix[2]
+
+      subrec_id = values[subrec_name][ind]["id"]
+      subrec_index = find_subrec_index_in_victim(victim, subrec_name, subrec_id)
+
+      target[subrec_name][ind][field] = victim[subrec_name][subrec_index][field]
+    end
+  end
+
+
+  # do subrec replace operations
+  def merge_details_subrec(target, victim, selections, values)
+    selections.each do |path_fix|
+      subrec_name = path_fix[0]
+      # this is the index of the order the user arranged the subrecs in the form, not the order of the subrecords in the DB.
+      ind         = path_fix[1] 
+      mode        = path_fix[2]
+
+      subrec_id = values[subrec_name][ind]["id"]
+      subrec_index = find_subrec_index_in_victim(victim, subrec_name, subrec_id)
+
+      replacer = victim[subrec_name][subrec_index]
+
+      # notes are a special case because of the way they store JSON in a db field. So Reordering is not supported, and we can assume the position in the merge request is the position in the victims notes subrecord JSON.
+      if subrec_name == "notes"
+        replacer = victim["notes"][ind]
+        to_append = process_subrecord_for_merge(target, replacer, subrec_name, mode, ind)
+
+        target[subrec_name].push(process_subrecord_for_merge(target, replacer, subrec_name, mode, ind))
+      elsif mode == "replace"
+        target[subrec_name][ind] = process_subrecord_for_merge(target, replacer, subrec_name, mode, ind)
+      elsif mode == "append"
+        target[subrec_name].push(process_subrecord_for_merge(target, replacer, subrec_name, mode, ind))
+      end
+
+    end
+  end
+
+  # we don't know how the user reordered the subrecords on the merge form,
+  # so find the index with the right data given the ID of the right thing to replace/add by searching for it.
+  def find_subrec_index_in_victim(victim, subrec_name, subrec_id)
+    ind = nil
+    victim[subrec_name].each_with_index do |subrec, i|
+      if subrec["id"] == subrec_id
+        ind = i
+        break
+      end
+    end
+
+    return ind
+  end
+
+  # before we can merge a subrecord, we need to update the IDs, tweak things to prevent validation issues, etc
+  def process_subrecord_for_merge(target, subrecord, jsonmodel_type, mode, ind)
+    target_id = target['id']
+
+    if jsonmodel_type == 'names'
+      # an agent name can only have one authorized or display name.
+      # make sure the name being merged in doesn't conflict with this
+
+      # if appending, always disable fields that validate across a set. If replacing, always keep values from target 
+      if mode == "append"
+        subrecord['authorized']      = false
+        subrecord['is_display_name'] = false
+      elsif mode == "replace"
+        subrecord['authorized']      = target['names'][ind]['authorized']
+        subrecord['is_display_name'] = target['names'][ind]['is_display_name']
+      end
+
+    elsif jsonmodel_type == 'agent_record_identifiers'
+      # same with agent_record_identifiers being marked as primary, we can only have one
+
+      if mode == "append"
+        subrecord['primary_identifier'] = false
+
+      elsif mode == "replace"
+        subrecord['primary_identifier'] = target['agent_record_identifiers'][ind]['primary_identifier']
+      end
+    end
+
+    set_agent_id(target_id, subrecord)
+
+    return subrecord
+  end
+
+  # don't try to replace these values from victim to target when merging, ever!
+  def skippable_record_key?(k)
+    k == "agent_person_id" ||
+    k == "agent_family_id" ||
+    k == "agent_corporate_entity_id" ||
+    k == "agent_software_id" ||
+    k == "created_by" ||
+    k == "last_modified_by" ||
+    k == "create_time" ||
+    k == "system_mtime" ||
+    k == "user_mtime" ||
+    k == "lock_version" ||
+    k == "primary_identifier" || # only one primary identifier allowed in set 
+    k == "jsonmodel_type"
   end
 
   # NOTE: this code is a duplicate of the auto_generate code for creating sort name
@@ -362,6 +505,7 @@ curl -H 'Content-Type: application/json' \\
     end
 
     result << " (#{target["qualifier"]})" if target["qualifier"]
+    result << " (#{target["sort_name_date_string"]})" if target["sort_name_date_string"]
 
     result.lstrip!
 
