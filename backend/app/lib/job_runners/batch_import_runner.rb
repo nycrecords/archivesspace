@@ -147,7 +147,8 @@ class BatchImportRunner < JobRunner
           ticker.log("\n\n") 
         end 
       else
-        ticker.log("Error: #{CGI.escapeHTML(  last_error.inspect )}")
+        ticker.log("Trace:" + last_error.backtrace.inspect)
+        ticker.log("Errors: #{CGI.escapeHTML(  last_error.inspect )}")
         Log.exception(last_error)
       end
       ticker.log("!" * 50 ) 
