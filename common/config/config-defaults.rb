@@ -492,10 +492,10 @@ AppConfig[:pui_pdf_timeout] = 600
 
 # The following determine which 'tabs' are on the main horizontal menu
 AppConfig[:pui_hide] = {}
-AppConfig[:pui_hide][:repositories] = false
-AppConfig[:pui_hide][:resources] = false
+AppConfig[:pui_hide][:repositories] = true
+AppConfig[:pui_hide][:resources] = true
 AppConfig[:pui_hide][:digital_objects] = false
-AppConfig[:pui_hide][:accessions] = false
+AppConfig[:pui_hide][:accessions] = true
 AppConfig[:pui_hide][:subjects] = false
 AppConfig[:pui_hide][:agents] = false
 AppConfig[:pui_hide][:classifications] = false
@@ -520,8 +520,8 @@ AppConfig[:pui_display_deaccessions] = true
 AppConfig[:pui_readmore_max_characters] = 450
 
 # Enable / disable PUI resource/archival object page actions
-AppConfig[:pui_page_actions_cite] = true
-AppConfig[:pui_page_actions_request] = true
+AppConfig[:pui_page_actions_cite] = false
+AppConfig[:pui_page_actions_request] = false
 AppConfig[:pui_page_actions_print] = true
 
 # Enable / disable search-in-collection form in sidebar when viewing records
