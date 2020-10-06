@@ -5,6 +5,9 @@
 ## value from its default.
 ###############################################################################
 
+# Plug-ins to load. They will load in the order specified
+AppConfig[:plugins] = ['local',  'lcnaf', 'aspace-doris-public']
+
 # The following determine which 'tabs' are on the main horizontal menu
 AppConfig[:pui_hide][:repositories] = true
 AppConfig[:pui_hide][:resources] = true
