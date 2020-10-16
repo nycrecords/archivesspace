@@ -1,4 +1,4 @@
-//= require jquery3
+//= require jquery
 //= require popper
 //= require jquery_ujs
 //= require bootstrap-sprockets
