@@ -13,22 +13,10 @@
  * NO = require_tree .
  * NO = require_self
  */
-// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
-@import "bootstrap-sprockets";
 @import "bootstrap";
+@import "custom";
+@import "theme";
 
-@import  "archivesspace/fonts";
-@import "archivesspace/colors";
-@import "archivesspace/variables";
 //font-awesome
 @import "font-awesome-sprockets";
 @import "font-awesome";
-// @import "bootstrap-sass/_glyphicons.scss";
-// @import "load-awesome/line-spin-clockwise-fade.css";
-@import "foundation/_functions.scss";
-@import "archivesspace/aspace"; 
-@import "archivesspace/record-type-badge";
-
-@import "archivesspace/infinite-scroll";
-@import "archivesspace/largetree";
-@import "archivesspace/mixed-content";
