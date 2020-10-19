@@ -10,7 +10,7 @@ AppConfig[:plugins] = ['local',  'lcnaf', 'aspace-doris-public']
 
 # The following determine which 'tabs' are on the main horizontal menu
 AppConfig[:pui_hide][:repositories] = true
-AppConfig[:pui_hide][:resources] = true
+AppConfig[:pui_hide][:digital_objects] = true
 AppConfig[:pui_hide][:accessions] = true
 
 # Enable / disable PUI resource/archival object page actions
