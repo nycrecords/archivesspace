@@ -52,7 +52,7 @@ class ArchivesSpaceService < Sinatra::Base
     .description("Search this repository")
     .params(["repo_id", :repo_id],
             *BASE_SEARCH_PARAMS)
-    .paged(true)
+    .paged(false)
     .permissions([:view_repository])
     .returns([200, ""]) \
   do
