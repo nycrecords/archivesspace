@@ -15,7 +15,6 @@ class SubjectsController <  ApplicationController
     :limit => 'subject',
     :op => ['OR'],
     :field => ['title']
-
   }
 
   before_action(:only => [:show]) {

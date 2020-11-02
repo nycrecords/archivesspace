@@ -19,3 +19,5 @@ AppConfig[:pui_page_actions_request] = false
 AppConfig[:db_url] = "jdbc:mysql://localhost:3306/archivesspace?user=root&password=root@123&useUnicode=true&characterEncoding=UTF-8&useSSL=false"
 
 AppConfig[:pui_indexer_thread_count] = 4
+AppConfig[:pui_search_results_page_size]=9999
+AppConfig[:max_page_size]=9999

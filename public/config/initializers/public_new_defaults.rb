@@ -19,7 +19,7 @@ module PublicNewDefaults
         when :accessions
           $MAIN_MENU.push(['/accessions', 'unprocessed'])
         when :subjects
-          $MAIN_MENU.push(['/subjects?all_ids=true', 'subject._plural'])
+          $MAIN_MENU.push(['/subjects', 'subject._plural'])
         when :agents
           $MAIN_MENU.push(['/agents', 'pui_agent._plural'])
         when :classifications
