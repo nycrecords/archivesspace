@@ -20,7 +20,7 @@ class SubjectsController <  ApplicationController
   before_action(:only => [:show]) {
     process_slug_or_id(params)
   }
-  
+
   def index
     repo_id = params.fetch(:rid, nil)
     if !params.fetch(:q, nil)
@@ -30,7 +30,7 @@ class SubjectsController <  ApplicationController
     end
     search_opts = default_search_opts(DEFAULT_SUBJ_SEARCH_OPTS)
     search_opts['fq'] = ["used_within_published_repository:\"/repositories/#{repo_id}\""] if repo_id
-    @base_search  =  repo_id ? "/repositories/#{repo_id}/subjects?" : '/subjects'
+    @base_search  =  repo_id ? "/repositories/#{repo_id}/subjects?" : '/subjects?'
     default_facets = repo_id ? [] : ['used_within_published_repository']
     page = Integer(params.fetch(:page, "1"))
     begin
@@ -61,17 +61,6 @@ class SubjectsController <  ApplicationController
       @sort_opts.unshift(all_sorts['relevance'])
     end
     @no_statement = true
-    # subject_types is a hash with term_type as key and the subject record as value
-    @subject_types = Hash.new
-    @results.records.each do |result|
-      puts(result)
-      sub_type = result['json']['terms'][0]['term_type']
-      if @subject_types.has_key?(sub_type)
-        @subject_types[sub_type] << result
-      else
-        @subject_types[sub_type] = [result]
-      end
-    end
     render 'search/search_results'
   end
 
