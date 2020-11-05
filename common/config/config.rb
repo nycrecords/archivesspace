@@ -16,3 +16,7 @@ AppConfig[:pui_hide][:accessions] = true
 # Enable / disable PUI resource/archival object page actions
 AppConfig[:pui_page_actions_cite] = false
 AppConfig[:pui_page_actions_request] = false
+
+#Maximum results and number of search results on a page
+AppConfig[:pui_search_results_page_size] = 9999
+AppConfig[:max_page_size] = 9999
