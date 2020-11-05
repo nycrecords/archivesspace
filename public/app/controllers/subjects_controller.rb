@@ -72,7 +72,7 @@ class SubjectsController <  ApplicationController
         @subject_types[sub_type] = [result]
       end
     end
-    render 'search/subjects_search_results'
+    render 'search/search_results'
   end
 
   def search
