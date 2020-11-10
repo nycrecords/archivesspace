@@ -39,13 +39,15 @@ stages:
         chromedriver -v
       displayName: 'Install ChromeDriver'
   - job: Setup_MySQL
+    condition: eq(variables['DB'], 'mysql')
     steps:
       - script: |  
           sudo systemctl start mysql
           sudo mysql -uroot -proot -e "use mysql; update user set authentication_string=PASSWORD('Change4me') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
         displayName: 'Setup MySQL'
-  - job:
+  - job: Setup_Java
     condition: eq(variables['DB'], 'mysql')
+    dependsOn: Setup_MySQL
     steps:
       - script: |
           free -m
