@@ -45,7 +45,7 @@ stages:
           sudo mysql -uroot -proot -e "use mysql; update user set authentication_string=PASSWORD('Change4me') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
         displayName: 'Setup MySQL'
   - job:
-    condition: eq(${var.DB}, 'mysql')
+    condition: eq(variables['DB'], 'mysql')
     steps:
       - script: |
           free -m
