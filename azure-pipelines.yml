@@ -16,49 +16,49 @@ pool:
   vmImage: 'ubuntu-latest'
 
 stages:
-- stage: Backend_Tests
-  jobs:
-  - job: Test
-    strategy:
-      matrix:
-        test_backend:
-          TEST: 'backend:test'
-        test_indexer:
-          TEST: 'indexer:test'
-    steps:
-    - script: |
-        cat /etc/hosts # Fix buffer overflow in getLocalHostName of OpenJDK 6/7 by shortening the host name
-        sudo hostname "$(hostname | cut -c1-63)"
-        sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts > /tmp/hosts
-        sudo mv /tmp/hosts /etc/hosts
-        cat /etc/hosts
-      displayName: 'Set Hostname'
-    - script: |  
-        sudo systemctl start mysql
-        sudo mysql -uroot -proot -e "use mysql; update user set authentication_string=PASSWORD('Change4me') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
-      displayName: 'Setup MySQL'
-    - script: |
-        free -m
-        sleep 3
-        mkdir lib
-        cd lib
-        curl -Oq https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.39/mysql-connector-java-5.1.39.jar
-      displayName: 'Download MySQL Connector JAR'
-    - script: |
-        export JAVA_OPTS="-Daspace.config.db_url=jdbc:mysql://localhost:3306/archivesspace?useUnicode=true&characterEncoding=UTF-8&user=root&password=Change4me"
-      displayName: 'Set JAVA_OPTS'
-    - script: |
-        mysql -uroot -pChange4me -h 127.0.0.1 -e "create database archivesspace default character set utf8;"
-      displayName: 'Create Test Database'
-    - script: |
-        export JAVA_OPTS="-Xmx1024m -verbose:gc $JAVA_OPTS"
-      displayName: 'Set JAVA_OPTS (Memory)'
-    - script: |
-        build/run bootstrap
-      displayName: Bootstrap ArchivesSpace Environment
-    - script: |
-        build/run $(TEST)
-      displayName: 'Run Tests'
+# - stage: Backend_Tests
+#   jobs:
+  # - job: Test
+  #   strategy:
+  #     matrix:
+  #       test_backend:
+  #         TEST: 'backend:test'
+  #       test_indexer:
+  #         TEST: 'indexer:test'
+  #   steps:
+  #   - script: |
+  #       cat /etc/hosts # Fix buffer overflow in getLocalHostName of OpenJDK 6/7 by shortening the host name
+  #       sudo hostname "$(hostname | cut -c1-63)"
+  #       sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts > /tmp/hosts
+  #       sudo mv /tmp/hosts /etc/hosts
+  #       cat /etc/hosts
+  #     displayName: 'Set Hostname'
+  #   - script: |  
+  #       sudo systemctl start mysql
+  #       sudo mysql -uroot -proot -e "use mysql; update user set authentication_string=PASSWORD('Change4me') where User='root'; update user set plugin='mysql_native_password';FLUSH PRIVILEGES;"
+  #     displayName: 'Setup MySQL'
+  #   - script: |
+  #       free -m
+  #       sleep 3
+  #       mkdir lib
+  #       cd lib
+  #       curl -Oq https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.39/mysql-connector-java-5.1.39.jar
+  #     displayName: 'Download MySQL Connector JAR'
+  #   - script: |
+  #       export JAVA_OPTS="-Daspace.config.db_url=jdbc:mysql://localhost:3306/archivesspace?useUnicode=true&characterEncoding=UTF-8&user=root&password=Change4me"
+  #     displayName: 'Set JAVA_OPTS'
+  #   - script: |
+  #       mysql -uroot -pChange4me -h 127.0.0.1 -e "create database archivesspace default character set utf8;"
+  #     displayName: 'Create Test Database'
+  #   - script: |
+  #       export JAVA_OPTS="-Xmx1024m -verbose:gc $JAVA_OPTS"
+  #     displayName: 'Set JAVA_OPTS (Memory)'
+  #   - script: |
+  #       build/run bootstrap
+  #     displayName: Bootstrap ArchivesSpace Environment
+  #   - script: |
+  #       build/run $(TEST)
+  #     displayName: 'Run Tests'
 - stage: Frontend_Tests
   jobs:
   - job: Test
