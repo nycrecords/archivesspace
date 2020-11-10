@@ -33,6 +33,7 @@ steps:
     sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
     chromedriver -v
     sudo apt-get install mysql-server
+    sudo systemctl start mysql
   displayName: 'Install'
 
 - script: |
