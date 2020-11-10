@@ -75,5 +75,10 @@ ul a {
     font-weight: 600;
 }
 #content a {
-    color:#181A7B !important;
+    color:#181A7B;
+}
+.selected-index{
+    font-weight:bold;
+    text-decoration:underline;
+    text-align:left;
 }
