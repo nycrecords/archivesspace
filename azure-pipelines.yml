@@ -60,7 +60,7 @@ stages:
           export JAVA_OPTS="-Daspace.config.db_url=jdbc:mysql://localhost:3306/archivesspace?useUnicode=true&characterEncoding=UTF-8&user=root&password=Change4me"
         displayName: 'Set JAVA_OPTS'
       - script: |
-          mysql -uroot -pChange4me -e "create database archivesspace default character set utf8;"
+          mysql -uroot -pChange4me -h 127.0.0.1 -e "create database archivesspace default character set utf8;"
         displayName: 'Create Test Database'
       - script: |
           export JAVA_OPTS="-Xmx1024m -verbose:gc $JAVA_OPTS"
