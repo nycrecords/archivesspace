@@ -3,17 +3,46 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+variables:
+  DB: 'mysql'
+
 trigger:
-- master
+  batch: true
+  branches:
+    include:
+      - master
 
 pool:
   vmImage: 'ubuntu-latest'
 
 steps:
-- script: echo Hello, world!
-  displayName: 'Run a one-line script'
+- script: |
+    cat /etc/hosts # Fix buffer overflow in getLocalHostName of OpenJDK 6/7 by shortening the host name
+    sudo hostname "$(hostname | cut -c1-63)"
+    sed -e "s/^\\(127\\.0\\.0\\.1.*\\)/\\1 $(hostname | cut -c1-63)/" /etc/hosts > /tmp/hosts
+    sudo mv /tmp/hosts /etc/hosts
+    cat /etc/hosts
+  displayName: 'Before install'
 
 - script: |
-    echo Add other tasks to build, test, and deploy your project.
-    echo See https://aka.ms/yaml
-  displayName: 'Run a multi-line script'
+    wget -N http://chromedriver.storage.googleapis.com/2.33/chromedriver_linux64.zip -P ~/
+    unzip ~/chromedriver_linux64.zip -d ~/
+    rm ~/chromedriver_linux64.zip
+    sudo mv -f ~/chromedriver /usr/local/share/
+    sudo chmod +x /usr/local/share/chromedriver
+    sudo ln -s /usr/local/share/chromedriver /usr/local/bin/chromedriver
+    chromedriver -v
+    sudo apt-get install mysql-server
+  displayName: 'Install'
+
+- script: |
+    free -m
+    sleep 3
+    if [[ "$DB" == "mysql" ]]; then (mkdir lib; cd lib; curl -Oq https://repo1.maven.org/maven2/mysql/mysql-connector-java/5.1.39/mysql-connector-java-5.1.39.jar );
+    fi
+    if [[ "$DB" == "mysql" ]]; then export JAVA_OPTS="-Daspace.config.db_url=jdbc:mysql://localhost:3306/archivesspace?useUnicode=true&characterEncoding=UTF-8&user=root";
+    fi
+    if [[ "$DB" == "mysql" ]]; then mysql -e "create database archivesspace default
+    character set utf8;"; fi
+    'export JAVA_OPTS="-Xmx1024m -verbose:gc $JAVA_OPTS"'
+  displayName: 'Before script'
