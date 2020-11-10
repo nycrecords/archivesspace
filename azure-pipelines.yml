@@ -106,5 +106,8 @@ stages:
         export JAVA_OPTS="-Xmx1024m -verbose:gc $JAVA_OPTS"
       displayName: 'Set JAVA_OPTS (Memory)'
     - script: |
+        build/run bootstrap
+      displayName: Bootstrap ArchivesSpace Environment
+    - script: |
         build/run $(TEST)
       displayName: 'Run Tests'
