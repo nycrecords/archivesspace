@@ -64,8 +64,10 @@ stages:
   - job: Test
     strategy:
       matrix:
-        # test_frontend: 
-        #   TEST: 'frontend:test'
+        test_frontend: 
+          TEST: 'frontend:test'
+        test_frontend_selenium:
+          TEST: 'frontend:selenium'
         test_public:
           TEST: 'public:test'
     steps:
@@ -103,7 +105,7 @@ stages:
         mysql -uroot -pChange4me -h 127.0.0.1 -e "create database archivesspace default character set utf8;"
       displayName: 'Create Test Database'
     - script: |
-        export JAVA_OPTS="-Xmx1024m -verbose:gc $JAVA_OPTS"
+        export JAVA_OPTS="-Xmx4096m -verbose:gc $JAVA_OPTS"
       displayName: 'Set JAVA_OPTS (Memory)'
     - script: |
         build/run bootstrap
