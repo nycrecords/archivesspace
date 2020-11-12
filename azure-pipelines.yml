@@ -64,8 +64,8 @@ stages:
   - job: Test
     strategy:
       matrix:
-        test_frontend: 
-          TEST: 'frontend:test'
+        # test_frontend: 
+        #   TEST: 'frontend:test'
         test_public:
           TEST: 'public:test'
     steps:
