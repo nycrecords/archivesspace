@@ -109,5 +109,5 @@ stages:
         build/run bootstrap
       displayName: Bootstrap ArchivesSpace Environment
     - script: |
-        build/run $(TEST)
+        SELENIUM_CHROME=true build/run $(TEST)
       displayName: 'Run Tests'
