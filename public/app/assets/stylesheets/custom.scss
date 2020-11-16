@@ -82,3 +82,11 @@ ul a {
     text-decoration:underline;
     text-align:left;
 }
+.below-the-fold{
+    display:none;
+}
+
+#collection_header :hover{
+    cursor: pointer;
+    font-weight:900;
+}
