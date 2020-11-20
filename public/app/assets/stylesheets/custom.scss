@@ -86,3 +86,16 @@ ul a {
     padding-left: 5px;
     color: #181A7B;
 }
+.selected-index{
+    font-weight:bold;
+    text-decoration:underline;
+    text-align:left;
+}
+.below-the-fold{
+    display:none;
+}
+
+#collection_header :hover{
+    cursor: pointer;
+    font-weight:900;
+}
