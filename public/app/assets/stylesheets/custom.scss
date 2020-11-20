@@ -75,7 +75,16 @@ ul a {
     font-weight: 600;
 }
 #content a {
-    color:#181A7B;
+    color: #181A7B;
+}
+.selected-index {
+    font-weight: bold;
+    text-decoration: underline;
+    text-align: left;
+}
+.advanced-search-link {
+    padding-left: 5px;
+    color: #181A7B;
 }
 .selected-index{
     font-weight:bold;
