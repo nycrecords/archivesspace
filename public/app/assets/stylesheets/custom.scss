@@ -107,3 +107,20 @@ ul a {
 .hidden {
     display: none !important;
 }
+.description {
+    font-size: 12pt;
+}
+tr.largetree-node{
+    font-size: 10pt;
+}
+tr.waypoint{
+    height:auto !important;
+}
+.sidebar li {
+    list-style: none;
+    font-size: 10pt;
+    padding: 3px;
+}
+.sidebar{
+    padding-left: 0px;
+}
