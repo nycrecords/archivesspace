@@ -54,6 +54,11 @@ ol.breadcrumb li {
     flex: none;
     display: inline-block;
 }
+.input-group .advanced-search-year {
+    width: 120px !important;
+    flex: none;
+    display: inline-block;
+}
 ul {
     margin-left: -15px;
 }
@@ -98,4 +103,7 @@ ul a {
 #collection_header :hover{
     cursor: pointer;
     font-weight:900;
+}
+.hidden {
+    display: none !important;
 }
