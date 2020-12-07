@@ -105,7 +105,7 @@
         var self = this;
 
         self.scrollbarElt = $('<div class="infinite-record-scrollbar" />');
-        self.scrollbarElt.append($('<div class="infinite-record-spacer" />').height(10000000));
+        self.scrollbarElt.append($('<div class="infinite-record-spacer" />'));
         self.scrollbarElt.height(self.wrapper.height());
 
 
