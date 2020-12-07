@@ -110,10 +110,10 @@ ul a {
 .description {
     font-size: 12pt;
 }
-tr.largetree-node{
+tr.largetree-node {
     font-size: 10pt;
 }
-tr.waypoint{
+tr.waypoint {
     height:auto !important;
 }
 .sidebar li {
@@ -121,6 +121,9 @@ tr.waypoint{
     font-size: 10pt;
     padding: 3px;
 }
-.sidebar{
+.sidebar {
     padding-left: 0px;
+}
+.white-link {
+    color: #fff !important;
 }
