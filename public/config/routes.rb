@@ -60,6 +60,7 @@ Rails.application.routes.draw do
 
     #CLASSIFICATION TERMS
     get  "repositories/:repo_slug/classification_terms/:slug_or_id" => 'classifications#term'
+    get  "repositories/:rid/classification_terms/:id/json" => 'classifications#term_json'
     get  "classification_terms/:slug_or_id" => 'classifications#term'
 
     #SUBJECTS
