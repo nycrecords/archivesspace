@@ -51,6 +51,8 @@ Rails.application.routes.draw do
     get 'classifications/search' => 'classifications#search'
     get 'classifications' => 'classifications#index'
     get "repositories/:rid/classifications/:id" => 'classifications#show'
+    get "repositories/:rid/classifications/:id/linked_records" => 'classifications#linked_records'
+
     get "repositories/:rid/classifications/" => 'classifications#index'
 
     get "repositories/:rid/classifications/:id/tree/root"  => 'classifications#tree_root'
