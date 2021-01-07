@@ -51,6 +51,8 @@ Rails.application.routes.draw do
     get 'classifications/search' => 'classifications#search'
     get 'classifications' => 'classifications#index'
     get "repositories/:rid/classifications/:id" => 'classifications#show'
+    get "repositories/:rid/classifications/:id/linked_records" => 'classifications#linked_records'
+
     get "repositories/:rid/classifications/" => 'classifications#index'
 
     get "repositories/:rid/classifications/:id/tree/root"  => 'classifications#tree_root'
@@ -60,6 +62,7 @@ Rails.application.routes.draw do
 
     #CLASSIFICATION TERMS
     get  "repositories/:repo_slug/classification_terms/:slug_or_id" => 'classifications#term'
+    get  "repositories/:rid/classification_terms/:id/json" => 'classifications#term_json'
     get  "classification_terms/:slug_or_id" => 'classifications#term'
 
     #SUBJECTS
