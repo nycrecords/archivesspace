@@ -171,3 +171,59 @@ tr.waypoint {
 tr td {
     vertical-align: text-bottom !important;
 }
+
+//Collection organization tree
+.treeview, .treeview ul {
+    margin: 0;
+    padding:0;
+    list-style:none;
+    overflow:auto;
+}
+.treeview ul {
+    position:relative
+}
+.treeview ul ul {
+    margin-left:.5em !important;
+}
+.treeview ul:before {
+    content:"";
+    display:block;
+    width:0;
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+}
+.treeview li {
+    padding:0 1em;
+    position:relative
+}
+.treeview ul li:before {
+    content:"";
+    display:block;
+    width:10px;
+    height:0;
+    margin-top:-1px;
+    position:absolute;
+    top:1em;
+    left:0
+}
+.treeview ul li:last-child:before {
+    height:auto;
+    top:1em;
+    bottom:0
+}
+.indicator {
+    margin-right:5px;
+}
+.treeview li button, .treeview li button:active, .treeview li button:focus {
+    text-decoration: none;
+    border:none;
+    margin:0px 0px 0px 0px;
+    padding:0px 0px 0px 0px;
+    outline: 0;
+}
+#root{
+    font-size: 12pt;
+}
+
