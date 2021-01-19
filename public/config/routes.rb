@@ -27,6 +27,10 @@ Rails.application.routes.draw do
     get  "repositories/:rid/resources/:id/tree/waypoint"  => 'resources#tree_waypoint'
     get  "repositories/:rid/resources/:id/tree/node"  => 'resources#tree_node'
     get  "repositories/:rid/resources/:id/tree/node_from_root"  => 'resources#tree_node_from_root'
+    #Fetches raw data for records and renders it as an infinite item
+    get  "repositories/:rid/resources/:id/tree/infinite_resolve"  => 'resources#infinite_resolve'
+    #Fetches raw data for a record
+    get "repositories/:rid/resources/:id/raw_json"  => 'resources#raw_json'
 
     #ACCESSIONS
     get "accessions/:slug_or_id"  => 'accessions#show'
