@@ -23,6 +23,10 @@ class ApplicationController < ActionController::Base
   rescue_from LoginFailedException, :with => :render_backend_failure
   rescue_from RequestFailedException, :with => :render_backend_failure
   rescue_from NoResultsError, :with => :render_no_results_found
+=begin
+  Uncomment to update missing template error page
+  rescue_from ActionView::MissingTemplate, :with => :render_missing_template
+=end
 
 
   # Allow overriding of templates via the local folder(s)
@@ -39,6 +43,14 @@ class ApplicationController < ActionController::Base
   end
 
   private
+
+=begin
+  Uncomment to update missing template error page
+  def render_missing_template(exception)
+    Rails.logger.error(exception)
+    render :template => '/error/missing_template', :status => 500
+  end
+=end
 
   def render_backend_failure(exception)
     Rails.logger.error(exception)
