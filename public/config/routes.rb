@@ -31,7 +31,8 @@ Rails.application.routes.draw do
     get  "repositories/:rid/resources/:id/tree/infinite_resolve"  => 'resources#infinite_resolve'
     #Fetches raw data for a record
     get "repositories/:rid/resources/:id/raw_json"  => 'resources#raw_json'
-
+    #Fetches identifiers(idbadge) for records
+    post "repositories/:rid/resources/:id/data_identifier"  => 'resources#get_dataid'
     #ACCESSIONS
     get "accessions/:slug_or_id"  => 'accessions#show'
     get "repositories/:repo_slug/accessions/:slug_or_id"  => 'accessions#show'
