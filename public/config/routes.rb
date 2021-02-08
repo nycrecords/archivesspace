@@ -48,6 +48,8 @@ Rails.application.routes.draw do
     get "repositories/:rid/digital_objects/:id/tree/waypoint"  => 'digital_objects#tree_waypoint'
     get "repositories/:rid/digital_objects/:id/tree/node"  => 'digital_objects#tree_node'
     get "repositories/:rid/digital_objects/:id/tree/node_from_root"  => 'digital_objects#tree_node_from_root'
+    #Fetch raw json data for all digital objects in a repository
+    get "repositories/:rid/digital_objects/raw_json" => 'objects#raw_json'
 
     #CLASSIFICATIONS
     get  "classifications/:slug_or_id"  => 'classifications#show'
