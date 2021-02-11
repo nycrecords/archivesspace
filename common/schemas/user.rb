@@ -25,6 +25,7 @@
       },
 
       "email" => {"type" => "string", "maxLength" => 255},
+      "guid" => {"type" => "string", "maxLength" => 255},
       "first_name" => {"type" => "string", "maxLength" => 255},
       "last_name" => {"type" => "string", "maxLength" => 255},
       "telephone" => {"type" => "string", "maxLength" => 255},

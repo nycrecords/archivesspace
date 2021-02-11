@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require_relative 'lib/aspace_oauth'
+require_relative 'lib/nycid'
+
 oauth_definitions = AppConfig[:authentication_sources].find_all do |as|
   as[:model] == 'ASOauth'
 end
@@ -36,5 +38,33 @@ Rails.application.config.middleware.use OmniAuth::Builder do
     end
     provider oauth_definition[:provider], config
     $stdout.puts "REGISTERED OAUTH PROVIDER WITH CONFIG: #{config}"
+  end
+end
+
+Rails.application.config.after_initialize do
+  class WelcomeController < ApplicationController
+    set_access_control  :public => [:index]
+
+    def index
+      info = JSONModel::HTTP::get_json('/')
+      view_context.database_warning( info )
+
+      if session[:user] && @repositories.length === 0
+        if user_can?('create_repository')
+          flash.now[:info] = I18n.t("repository._frontend.messages.create_first_repository")
+        else
+          flash.now[:info] = I18n.t("repository._frontend.messages.no_access_to_repositories")
+        end
+      end
+
+      if session[:user] && params[:guid]
+        user_id = session[:user_uri].split('/').last
+        @user = JSONModel(:user).find(user_id)
+        if @user.guid.blank?
+          @user.guid = params[:guid]
+          @user.save
+        end
+      end
+    end
   end
 end
