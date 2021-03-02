@@ -66,6 +66,11 @@ gem 'zip-zip', '0.3'
 
 gem 'nokogiri', '>= 1.10.8'
 
+gem 'omniauth',      '1.7.1'
+gem 'omniauth-cas',  '1.1.1'
+gem 'omniauth-saml', '1.8.1'
+gem 'httparty'
+
 require 'asutils'
 
 # Allow plugins to provide their own Gemfiles too.
