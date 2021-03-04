@@ -4,6 +4,8 @@ Rails.application.routes.draw do
     root to: "welcome#show"
 
     get '/welcome', to: 'welcome#show'
+    get '/contact', to: 'contact#show'
+    post '/send_request', to: 'contact#compose'
 
     get '/*ark_tag/:naan/:id' => 'ark_name#show', constraints: { ark_tag: 'ark:' }
 
