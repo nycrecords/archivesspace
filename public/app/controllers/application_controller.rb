@@ -42,6 +42,14 @@ class ApplicationController < ActionController::Base
     ArchivesSpaceClient.instance
   end
 
+  def device_type
+    agent = request.user_agent
+    return "tablet" if agent =~ /(tablet|ipad)|(android(?!.*mobile))/i
+    return "mobile" if agent =~ /Mobile/
+    return "desktop"
+  end
+  helper_method :device_type
+
   private
 
 =begin
