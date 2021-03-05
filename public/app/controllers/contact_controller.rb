@@ -119,8 +119,9 @@ class ContactController < ApplicationController
   def compose
 
     email_body = ''
-    email_body += '<div>'+simple_format(params[:description])+'</div>'
     name = params[:name]
+    email_body += '<div><strong>Name</strong> <span>'+name+'</span></div>'
+    email_body += '<div>'+simple_format(params[:description])+'</div>'
     email_from  = params[:email_address]
 
     if params.has_key?(:research_request)
@@ -149,7 +150,7 @@ class ContactController < ApplicationController
 
     mail = Mail.new do
       from    email_from
-      to      'your@bestuserever.com'
+      to      AppConfig[:research_request_email]
       subject '(ArchivesSpace) Research Request from '+name
       html_part do
         content_type 'text/html; charset=UTF-8'

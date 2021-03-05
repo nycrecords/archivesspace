@@ -21,3 +21,7 @@ AppConfig[:pui_page_actions_request] = false
 AppConfig[:pui_search_results_page_size] = 9999
 AppConfig[:max_page_size] = 9999
 AppConfig[:pui_global_search_results_page_size] = 50
+
+# Email address for research requests
+AppConfig[:research_request_email] = 'your@bestuserever.com'
+AppConfig[:db_url] = "jdbc:mysql://localhost:3306/archivesspace?user=root&password=root@123&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
