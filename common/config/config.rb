@@ -12,6 +12,7 @@ AppConfig[:plugins] = ['local',  'lcnaf', 'aspace-doris-public']
 AppConfig[:pui_hide][:repositories] = true
 AppConfig[:pui_hide][:digital_objects] = true
 AppConfig[:pui_hide][:accessions] = true
+AppConfig[:pui_hide][:contact] = false
 
 # Enable / disable PUI resource/archival object page actions
 AppConfig[:pui_page_actions_cite] = false

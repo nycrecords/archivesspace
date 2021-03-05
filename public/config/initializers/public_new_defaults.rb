@@ -24,6 +24,8 @@ module PublicNewDefaults
           $MAIN_MENU.push(['/agents', 'pui_agent._plural'])
         when :classifications
           $MAIN_MENU.push(['/classifications', 'classification._plural'])
+        when :contact
+          $MAIN_MENU.push(['/contact', 'contact_form'])
       end
     end
   end
