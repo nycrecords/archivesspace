@@ -117,51 +117,55 @@ class ContactController < ApplicationController
   end
 
   def compose
-
     email_body = ''
     name = params[:name].html_safe
-    email_body += '<div><strong>Name</strong> <span>'+name+'</span></div>'
-    email_body += '<div>'+simple_format(params[:description].html_safe)+'</div>'
-    email_from  = params[:email_address]
+    email  = params[:email_address]
+    email_body += '<div><strong>Name</strong><br>' + name + '</div><br>'
+    email_body += '<div><strong>Email</strong><br>' + email + '</div>'
+    email_body += '<div>' + simple_format(params[:description].html_safe) + '</div>'
 
     if params.has_key?(:research_request)
       research_requests = params[:research_request]
 
       if research_requests.has_key?('collections')
-        email_body += '<p><b> Request Collections</b></p><ul>'
+        email_body += '<p><b>Request Collections</b></p><ul>'
         research_requests['collections'].each do |collection|
-          email_body += '<li>'+collection+'</li>'
+          email_body += '<li>' + collection + '</li>'
         end
         email_body += '</ul>'
       end
 
       if research_requests.has_key?('accessions')
-        email_body += '<p><b> Request Accessions</b></p><ul>'
+        email_body += '<p><b>Request Accessions</b></p><ul>'
         research_requests['accessions'].each do |accession|
-          email_body += '<li>'+accession+'</li>'
+          email_body += '<li>' + accession + '</li>'
         end
         email_body += '</ul>'
       end
     end
-    if params.has_key?(:additional_links)
-      email_body += '<p><b> Additional links</b></p>'+
-                    '<p>'+simple_format(params[:additional_links].html_safe)+'</p>'
+
+    if params.has_key?(:additional_links) && params[:additional_links] != ''
+      email_body += '<p><b>Additional links</b></p>' +
+                    '<p>' + simple_format(params[:additional_links].html_safe) + '</p>'
     end
 
     mail = Mail.new do
-      from    email_from
-      to      AppConfig[:research_request_email]
-      subject '(ArchivesSpace) Research Request from '+name
+      from    AppConfig[:contact_form_sender]
+      to      AppConfig[:contact_form_recipient]
+      subject '(ArchivesSpace) Research Request from ' + name
       html_part do
         content_type 'text/html; charset=UTF-8'
         body email_body
       end
     end
     Mail.defaults do
-      delivery_method AppConfig[:email_delivery_method] = :smtp, address: AppConfig[:email_delivery_domain], port: AppConfig[:email_delivery_port]
+      delivery_method :smtp, address: AppConfig[:smtp_address],
+                             port: AppConfig[:smtp_port],
+                             user_name: AppConfig[:smtp_user_name],
+                             password: AppConfig[:smtp_password],
+                             enable_starttls_auto: AppConfig[:enable_starttls_auto]
     end
     mail.deliver
-    redirect_to action: "show"
+    redirect_to action: 'show'
   end
-
 end

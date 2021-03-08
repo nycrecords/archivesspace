@@ -22,8 +22,11 @@ AppConfig[:pui_search_results_page_size] = 9999
 AppConfig[:max_page_size] = 9999
 AppConfig[:pui_global_search_results_page_size] = 50
 
-# Email address for research requests
-AppConfig[:research_request_email] = 'your@bestuserever.com'
-AppConfig[:email_delivery_domain] = 'localhost'
-AppConfig[:email_delivery_port] = 25
-AppConfig[:email_delivery_method] = :smtp
+# SMTP Settings
+AppConfig[:contact_form_recipient] = ''
+AppConfig[:contact_form_sender] = 'no-reply@records.nyc.gov'
+AppConfig[:smtp_address] = ''
+AppConfig[:smtp_port] = 25
+AppConfig[:smtp_user_name] = ''
+AppConfig[:smtp_password] = ''
+AppConfig[:enable_starttls_auto] = true
