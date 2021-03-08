@@ -119,9 +119,9 @@ class ContactController < ApplicationController
   def compose
 
     email_body = ''
-    name = params[:name]
+    name = params[:name].html_safe
     email_body += '<div><strong>Name</strong> <span>'+name+'</span></div>'
-    email_body += '<div>'+simple_format(params[:description])+'</div>'
+    email_body += '<div>'+simple_format(params[:description].html_safe)+'</div>'
     email_from  = params[:email_address]
 
     if params.has_key?(:research_request)
@@ -145,7 +145,7 @@ class ContactController < ApplicationController
     end
     if params.has_key?(:additional_links)
       email_body += '<p><b> Additional links</b></p>'+
-                    '<p>'+simple_format(params[:additional_links])+'</p>'
+                    '<p>'+simple_format(params[:additional_links].html_safe)+'</p>'
     end
 
     mail = Mail.new do
@@ -158,7 +158,7 @@ class ContactController < ApplicationController
       end
     end
     Mail.defaults do
-      delivery_method :smtp, address: "localhost", port: 25
+      delivery_method AppConfig[:email_delivery_method] = :smtp, address: AppConfig[:email_delivery_domain], port: AppConfig[:email_delivery_port]
     end
     mail.deliver
     redirect_to action: "show"

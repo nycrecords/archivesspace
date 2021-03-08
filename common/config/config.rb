@@ -24,3 +24,6 @@ AppConfig[:pui_global_search_results_page_size] = 50
 
 # Email address for research requests
 AppConfig[:research_request_email] = 'your@bestuserever.com'
+AppConfig[:email_delivery_domain] = 'localhost'
+AppConfig[:email_delivery_port] = 25
+AppConfig[:email_delivery_method] = :smtp
