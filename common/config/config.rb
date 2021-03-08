@@ -21,3 +21,12 @@ AppConfig[:pui_page_actions_request] = false
 AppConfig[:pui_search_results_page_size] = 9999
 AppConfig[:max_page_size] = 9999
 AppConfig[:pui_global_search_results_page_size] = 50
+
+# SMTP Settings
+AppConfig[:contact_form_recipient] = ''
+AppConfig[:contact_form_sender] = 'no-reply@records.nyc.gov'
+AppConfig[:smtp_address] = ''
+AppConfig[:smtp_port] = 25
+AppConfig[:smtp_user_name] = ''
+AppConfig[:smtp_password] = ''
+AppConfig[:enable_starttls_auto] = true
