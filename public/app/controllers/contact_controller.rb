@@ -159,11 +159,7 @@ class ContactController < ApplicationController
       end
     end
     Mail.defaults do
-      delivery_method :smtp, address: AppConfig[:smtp_address],
-                             port: AppConfig[:smtp_port],
-                             user_name: AppConfig[:smtp_user_name],
-                             password: AppConfig[:smtp_password],
-                             enable_starttls_auto: AppConfig[:enable_starttls_auto]
+      delivery_method :smtp, AppConfig[:smtp_settings]
     end
     mail.deliver
     redirect_to action: 'show'
