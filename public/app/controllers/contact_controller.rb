@@ -151,7 +151,7 @@ class ContactController < ApplicationController
 
     mail = Mail.new do
       from    AppConfig[:contact_form_sender]
-      to      AppConfig[:contact_form_recipient]
+      to      [AppConfig[:contact_form_recipient], email]
       subject '(ArchivesSpace) Research Request from ' + name
       html_part do
         content_type 'text/html; charset=UTF-8'
