@@ -17,10 +17,10 @@ jobs:
       with:
         java-version: 1.8
 
-    - name: Set Timezone
-      uses: szenius/set-timezone-action@v1.0
+    - name: Setup timezone
+      uses: zcong1993/setup-timezone@master
       with:
-        timezoneLinux: "America/New_York"
+        timezone: America/New_York
 
     - name: Get current date
       id: date
