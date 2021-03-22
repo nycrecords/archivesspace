@@ -56,5 +56,6 @@ jobs:
       with:
         files: aspkg-${{ steps.current_tag.outputs.new_version }}
         name: Release - ${{ steps.current_tag.outputs.new_version }}
+        tag_name: ${{ steps.current_tag.outputs.new_version }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
