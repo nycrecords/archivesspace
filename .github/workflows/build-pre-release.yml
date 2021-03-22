@@ -54,7 +54,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: aspkg-${{ steps.current_tag.outputs.new_version }}
+        files: aspkg-${{ steps.current_tag.outputs.new_version }}.zip
         name: Release - ${{ steps.current_tag.outputs.new_version }}
         tag_name: ${{ steps.current_tag.outputs.new_version }}
       env:
