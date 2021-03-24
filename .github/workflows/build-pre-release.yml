@@ -1,11 +1,9 @@
-name: Build ArchivesSpace release package
+name: Build ArchivesSpace Pre-Release Package
 
 on:
   push:
     branches:
-      - master
-    tags:
-     - v[1-9].[0-9]+.[0-9]+
+      - build-*
 
 jobs:
   build:
@@ -28,6 +26,8 @@ jobs:
       id: current_tag
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
+        pre_release_branches: build-*
+        custom_tag: ${{ steps.date.outputs.date }}
 
     - name: Bootstrap ArchivesSpace
       run: |
