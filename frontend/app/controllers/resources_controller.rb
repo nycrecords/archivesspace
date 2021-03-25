@@ -1,5 +1,6 @@
 class ResourcesController < ApplicationController
 
+
   set_access_control  "view_repository" => [:index, :show, :tree_root, :tree_node, :tree_waypoint, :node_from_root, :models_in_graph],
                       "update_resource_record" => [:new, :edit, :create, :update, :rde, :add_children, :publish, :accept_children],
                       "delete_archival_record" => [:delete],
@@ -7,6 +8,7 @@ class ResourcesController < ApplicationController
                       "suppress_archival_record" => [:suppress, :unsuppress],
                       "transfer_archival_record" => [:transfer],
                       "manage_repository" => [:defaults, :update_defaults]
+
 
 
   include ExportHelper

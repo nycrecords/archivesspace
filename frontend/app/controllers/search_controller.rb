@@ -2,8 +2,8 @@ require 'advanced_query_builder'
 
 class SearchController < ApplicationController
 
-  set_access_control  "view_repository" => [:do_search, :advanced_search]
-
+  set_access_control  "view_repository" => [:do_search, :advanced_search, :search_subject_types, :search_agent_types]
+  MAX_RAW_SEARCH_RESULTS = 9999
   include ExportHelper
 
   def advanced_search
@@ -68,5 +68,31 @@ class SearchController < ApplicationController
       }
     end
   end
+
+  def search_subject_types
+
+    subject_types = Search.all(session[:repo_id], params_for_backend_search.merge({"facet[]" => SearchResultData.BASE_FACETS.concat([]).uniq,"type[]" => ["subject"],"page_size"=>MAX_RAW_SEARCH_RESULTS}))
+    subject_types = JSON.parse(subject_types.to_json)
+    term_types_hash = Hash.new{|hsh,key| hsh[key] = [] }
+    subject_types['search_data']['results'].each do |result|
+      parsed_result = JSON.parse(result['json'])
+      term_types_hash[parsed_result['title']].push(parsed_result['terms'][0]['term_type'])
+    end
+    render :json => term_types_hash
+  end
+
+  def search_agent_types
+
+    @search_data = Search.all(session[:repo_id], params_for_backend_search.merge({"facet[]" => SearchResultData.BASE_FACETS.concat(params[:facets]||[]).uniq,"page_size"=>MAX_RAW_SEARCH_RESULTS}))
+    search_results = JSON.parse(@search_data.to_json)
+    result_hash = Hash.new
+    search_results['search_data']['results'].each do |result|
+      result_hash.merge!({result['title'] => result['primary_type']})
+    end
+    render :json => result_hash
+
+  end
+
+
 
 end

@@ -31,3 +31,5 @@ AppConfig[:smtp_settings] = {
   authentication: 'plain',
   openssl_verify_mode: 'none'
 }
+
+AppConfig[:db_url] = "jdbc:mysql://localhost:3306/archivesspace?user=root&password=root@123&useUnicode=true&characterEncoding=UTF-8&allowPublicKeyRetrieval=true&useSSL=false"
