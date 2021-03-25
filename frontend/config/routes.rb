@@ -199,6 +199,8 @@ ArchivesSpace::Application.routes.draw do
     match 'test/shutdown' => 'tests#shutdown', :via => [:get]
 
     match 'search' => 'search#do_search', :via => [:get]
+    match 'search/subject_type' => 'search#search_subject_types', :via => [:get]
+    match 'search/agent_type' => 'search#search_agent_types', :via => [:get]
     match 'advanced_search' => 'search#advanced_search', :via => [:get]
 
     match 'resolve/edit' => 'resolver#resolve_edit', :via => [:get]
@@ -314,6 +316,7 @@ ArchivesSpace::Application.routes.draw do
     match "system_info/log" => "system_info#stream_log", :via => [:get]
 
     root :to => 'welcome#index'
+
 
   end
 end
