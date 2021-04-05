@@ -58,7 +58,7 @@ jobs:
     - name: Build ArchivesSpace release package
       env: 
         VERSION: ${{ steps.get_version.outputs.VERSION }}
-      run: ./scripts/build_release ${{ steps.current_tag.outputs.new_version }}
+      run: ./scripts/build_release ${{ steps.current_tag.outputs.tag }}
 
     # LIMITATION: https://github.com/actions/upload-artifact/issues/39
     - name: Upload ArchivesSpace build package
