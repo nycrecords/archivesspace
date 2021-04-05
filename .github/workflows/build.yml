@@ -11,13 +11,14 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
+    container:
+      image: ubi8/ubi
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
 
     steps:
     - uses: actions/checkout@v2
-    - uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
+    - name: Install Java
+      run: sudo yum -y install java-11-openjdk
 
     - name: Get current date
       id: date
