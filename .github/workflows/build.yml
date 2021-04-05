@@ -17,35 +17,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install Build Dependencies
       run: |
-        yum -y install \
-                      java-11-openjdk  \
-                      nodejs  \
-                      wget  \
-                      unzip \
-                      bison \
-                      byacc \
-                      cscope \
-                      ctags \
-                      cvs \
-                      diffstat \
-                      doxygen \
-                      flex \
-                      gcc \
-                      gcc-c++ \
-                      gcc-gfortran \
-                      gettext \
-                      git \
-                      indent \
-                      intltool \
-                      libtool \
-                      patch \
-                      patchutils \
-                      rcs \
-                      redhat-rpm-config \
-                      rpm-build \
-                      subversion \
-                      swig \
-                      systemtap
+        yum -y install java-11-openjdk nodejs wget unzip
+        yum -y groupinstall "Development tools" --setopt=group_package_types=mandatory,default,optional
 
     - name: Bootstrap ArchivesSpace
       run: |
