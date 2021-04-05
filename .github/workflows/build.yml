@@ -23,6 +23,9 @@ jobs:
       run: |
         ./build/run bootstrap
 
+    - name: Setup tmate session
+      uses: mxschmitt/action-tmate@v3
+      
     - name: Get Current Tag
       id: current_github_tag
       run: echo ::set-output name=tag::${GITHUB_TAG#refs/*/}
