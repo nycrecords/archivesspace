@@ -16,21 +16,29 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Java
-      run: yum -y install java-11-openjdk nodejs
+      run: |
+        yum -y install java-11-openjdk nodejs wget unzip
+        yum -y groupinstall "Development Tools"
+
+    - name: Bootstrap ArchivesSpace
+      run: |
+        ./build/run bootstrap
+
+    - name: Get Current Tag
+      id: current_github_tag
+      run: echo ::set-output name=tag::${GITHUB_TAG#refs/*/}
 
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y%m%d%H%M')"
+      if: steps.current_github_tag.outputs.tag != ''
     
     - name: Generate tag (build)
       uses: mathieudutour/github-tag-action@v5.3
       id: current_tag
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Bootstrap ArchivesSpace
-      run: |
-        ./build/run bootstrap
+      if: steps.current_github_tag.outputs.tag != ''
 
     - name: Build ArchivesSpace release package
       env: 
