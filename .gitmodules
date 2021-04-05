@@ -1,8 +1,8 @@
 [submodule "aspace-doris-public"]
-	path = aspace-doris-public
+	path = plugins/aspace-doris-public
 	url = https://github.com/nycrecords/aspace-doris-public.git
 	branch = main
 [submodule "aspace-oauth"]
-	path = aspace-oauth
+	path = plugins/aspace-oauth
 	url = https://github.com/nycrecords/aspace-oauth.git
 	branch = main
