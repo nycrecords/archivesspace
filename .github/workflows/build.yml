@@ -17,10 +17,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Install Build Dependencies
       run: |
-        yum -y install java-11-openjdk nodejs wget unzip
-        yum group mark-install "Development tools"
-        yum group mark-convert "Development tools"
-        yum groupinstall "Development tools"
+        yum -y install java-11-openjdk  nodejs  wget  unzip bison byacc cscope ctags cvs diffstat doxygen flex gcc gcc-c++ gcc-gfortran gettext git indent intltool libtool patch patchutils rcs redhat-rpm-config rpm-build subversion swig systemtap
 
     - name: Bootstrap ArchivesSpace
       run: |
