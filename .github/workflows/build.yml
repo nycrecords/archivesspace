@@ -12,7 +12,7 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     container:
-      image: ubi8/ubi
+      image: registry.access.redhat.com/ubi8/ubi:8.1
     if: "!contains(github.event.head_commit.message, '[ci skip]')"
 
     steps:
