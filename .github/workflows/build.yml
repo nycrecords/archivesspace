@@ -18,7 +18,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Java
-      run: sudo yum -y install java-11-openjdk
+      run: yum -y install java-11-openjdk
 
     - name: Get current date
       id: date
