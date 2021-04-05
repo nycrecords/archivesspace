@@ -66,6 +66,11 @@ jobs:
         # github ui generates a zip that will contain the release zip
         name: aspkg-${{ steps.current_tag.outputs.new_version }}
         path: archivesspace-${{ steps.current_tag.outputs.new_version }}.zip
+
+    - name: Wait / Sleep
+      uses: jakejarvis/wait-action@v0.1.0
+      with:
+        time: '15s'
     
     - name: Release
       uses: softprops/action-gh-release@v1
