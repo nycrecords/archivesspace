@@ -18,7 +18,7 @@ jobs:
     - name: Install Java
       run: |
         yum -y install java-11-openjdk nodejs wget unzip
-        yum -y groupinstall "Development Tools"
+        yum -y groupinstall "Development tools"
 
     - name: Bootstrap ArchivesSpace
       run: |
