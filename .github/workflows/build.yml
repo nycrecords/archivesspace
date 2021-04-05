@@ -4,6 +4,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - v[0-9].[0-9]+.[0-9]+
 
 jobs:
   build:
@@ -23,40 +25,18 @@ jobs:
       run: |
         ./build/run bootstrap
 
-    - name: Setup tmate session
-      uses: mxschmitt/action-tmate@v3
-      
-    - name: Get Current Tag
-      id: current_github_tag
-      run: echo ::set-output name=tag::${GITHUB_TAG#refs/*/}
-
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y%m%d%H%M')"
       if: steps.current_github_tag.outputs.tag != 0
-    
+
     - name: Generate tag (build)
       uses: mathieudutour/github-tag-action@v5.3
-      id: new_tag
+      id: current_tag
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
-      if: steps.current_github_tag.outputs.tag != 0
-
-    - name: Set tag
-      id: current_tag
-      run:
-        if $CURRENT_GITHUB_TAG != 0; then
-          echo "::set-output name=tag::${GITHUB_TAG#refs/*/}"
-        else
-          echo "::set-output name=tag::$NEW_TAG"
-      env:
-        NEW_TAG: steps.new_tag.outputs.new_version
-        CURRENT_GITHUB_TAG: steps.current_github_tag.outputs.tag
-
-    - name: Print tag
-      run: echo $TAG
-      env:
-        TAG: steps.current_tag.outputs.tag
+        pre_release_branches: "*"
+        custom_tag: ${{ steps.date.outputs.date }}
 
     - name: Build ArchivesSpace release package
       env: 
