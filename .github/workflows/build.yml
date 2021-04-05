@@ -28,7 +28,7 @@ jobs:
     - name: Get current date
       id: date
       run: echo "::set-output name=date::$(date +'%Y%m%d%H%M')"
-      if: steps.current_github_tag.outputs.tag != 0
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
     - name: Generate tag (build)
       uses: mathieudutour/github-tag-action@v5.3
@@ -36,11 +36,24 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         custom_tag: ${{ steps.date.outputs.date }}
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
 
     - name: Build ArchivesSpace release package
       env: 
         VERSION: ${{ steps.get_version.outputs.VERSION }}
-      run: ./scripts/build_release ${{ steps.current_tag.outputs.tag }}
+      run: ./scripts/build_release ${{ steps.current_tag.outputs.new_version }}
+      if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
+
+    - name: Get tag
+      id: current_tag
+      run: echo ::set-output name=VERSION::${GITHUB_REF/refs\/tags\//}
+      if: ${{ startsWith(github.ref, 'refs/tags/v') }}
+
+    - name: Build ArchivesSpace release package
+      env: 
+        VERSION: ${{ steps.get_version.outputs.VERSION }}
+      run: ./scripts/build_release ${{ github.ref }}
+      if: ${{ startsWith(github.ref, 'refs/tags/v') }}
 
     # LIMITATION: https://github.com/actions/upload-artifact/issues/39
     - name: Upload ArchivesSpace build package
