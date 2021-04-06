@@ -82,6 +82,8 @@ jobs:
       with:
         files: aspkg-${{ steps.current_tag.outputs.new_version }}
         name: Pre-Release - ${{ steps.current_tag.outputs.new_version }}
+        tag_name: ${{ steps.current_tag.outputs.new_version }}
+        prerelease: true
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: ${{ !startsWith(github.ref, 'refs/tags/v') }}
