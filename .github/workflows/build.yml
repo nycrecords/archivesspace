@@ -71,7 +71,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: aspkg-${{ steps.current_tag.outputs.new_version }}
+        files: archivesspace-${{ steps.current_tag.outputs.new_version }}
         name: Release - ${{ steps.pushed_tag.outputs.new_version }}
         tag_name: ${{ steps.current_tag.outputs.new_version }}
       env:
@@ -81,7 +81,7 @@ jobs:
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: aspkg-${{ steps.current_tag.outputs.new_version }}
+        files: archivesspace-${{ steps.current_tag.outputs.new_version }}
         name: Pre-Release - ${{ steps.current_tag.outputs.new_version }}
         tag_name: ${{ steps.current_tag.outputs.new_version }}
       env:
