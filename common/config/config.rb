@@ -25,6 +25,7 @@ AppConfig[:pui_global_search_results_page_size] = 50
 # SMTP Settings
 AppConfig[:contact_form_recipient] = ''
 AppConfig[:contact_form_sender] = 'no-reply@records.nyc.gov'
+AppConfig[:submitter_as_contact_form_sender] = false
 AppConfig[:smtp_settings] = {
   address: 'localhost',
   port: 25,

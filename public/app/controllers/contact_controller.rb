@@ -7,7 +7,7 @@ class ContactController < ApplicationController
   helper_method :process_subjects
   helper_method :process_agents
 
-  skip_before_action  :verify_authenticity_token
+  skip_before_action :verify_authenticity_token
 
   # Removed langcode
   DEFAULT_RES_FACET_TYPES = %w{primary_type subjects published_agents}
@@ -112,12 +112,15 @@ class ContactController < ApplicationController
 
     if params.has_key?(:additional_links) && params[:additional_links] != ''
       email_body += '<p><b>Additional links</b></p>' +
-                    '<p>' + simple_format(params[:additional_links].html_safe) + '</p>'
+          '<p>' + simple_format(params[:additional_links].html_safe) + '</p>'
     end
 
+    # Set contact form sender
+    contact_form_sender = AppConfig[:submitter_as_contact_form_sender] ? email : AppConfig[:contact_form_sender]
+
     mail = Mail.new do
-      from    AppConfig[:contact_form_sender]
-      to      [AppConfig[:contact_form_recipient], email]
+      from contact_form_sender
+      to [AppConfig[:contact_form_recipient], email]
       subject '(ArchivesSpace) Research Request from ' + name
       html_part do
         content_type 'text/html; charset=UTF-8'
