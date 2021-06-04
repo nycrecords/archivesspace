@@ -97,8 +97,6 @@ module ArchivesSpacePublic
       config.action_mailer.perform_deliveries = false
     end
 
-    config.force_ssl = true
-
   end
 end
 

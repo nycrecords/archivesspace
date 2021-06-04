@@ -132,8 +132,6 @@ module ArchivesSpace
       end
     end
 
-    config.force_ssl = true
-
     # ArchivesSpace Configuration
     AppConfig.load_into(config)
   end
