@@ -24,7 +24,11 @@ class User < JSONModel(:user)
 
 
   def self.store_permissions(permissions, context)
-    context.send(:cookies).signed[:archivesspace_permissions] = 'ZLIB:' + Zlib::Deflate.deflate(ASUtils.to_json(Permissions.pack(permissions)))
+    context.send(:cookies).signed[:archivesspace_permissions] = {
+        :value => 'ZLIB:' + Zlib::Deflate.deflate(ASUtils.to_json(Permissions.pack(permissions))),
+        :secure => true,
+        :httponly => true
+    }
     context.session[:last_permission_refresh] = Time.now.to_i
   end
 

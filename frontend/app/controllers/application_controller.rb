@@ -338,7 +338,11 @@ class ApplicationController < ActionController::Base
   end
 
   def set_user_repository_cookie(repository_uri)
-    cookies[user_repository_cookie_key] = repository_uri
+    cookies[user_repository_cookie_key] = {
+        :value => repository_uri,
+        :secure => true,
+        :httponly => true
+    }
   end
 
 
