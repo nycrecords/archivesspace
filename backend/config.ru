@@ -10,6 +10,6 @@ end
 require 'rack/protection'
 
 map "/" do
-  use Rack::Protection, :except => :remote_token
+  use Rack::Protection, :except => [:remote_token, :session_hijacking]
   run ArchivesSpaceService
 end
