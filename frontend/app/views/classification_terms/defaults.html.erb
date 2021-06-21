@@ -14,7 +14,7 @@
 
            <div class="form-actions">
               <button type="submit" class="btn btn-primary"><%= I18n.t("actions.save_prefix") %> <%= I18n.t("classification_term._singular") %></button>
-              <%= link_to I18n.t("actions.cancel"), :back, :class => "btn btn-cancel btn-default" %>
+              <%= sanitize link_to I18n.t("actions.cancel"), :back, :class => "btn btn-cancel btn-default" %>
            </div>
          </div>
        </div>

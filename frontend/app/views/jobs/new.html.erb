@@ -21,7 +21,7 @@
             <div class="btn-group">
               <button type="submit" class="btn btn-primary"><%= I18n.t("job._frontend.actions.save") %></button>
             </div>
-            <%= link_to I18n.t("actions.cancel"), :back, :class => "btn btn-cancel btn-default" %>
+            <%= sanitize link_to I18n.t("actions.cancel"), :back, :class => "btn btn-cancel btn-default" %>
           </div>
         </div>
       </div>

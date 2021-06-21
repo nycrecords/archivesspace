@@ -49,7 +49,7 @@
             <% if !@is_batch_update %> 
               <button type="button" class="btn preview-locations"><%= I18n.t("location_batch._frontend.action.preview") %></button>
             <% end %>   
-            <%= link_to I18n.t("actions.cancel"), :back, :class => "btn btn-cancel btn-default" %>
+            <%= sanitize link_to I18n.t("actions.cancel"), :back, :class => "btn btn-cancel btn-default" %>
           </div>
         </div>
       </div>
