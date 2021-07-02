@@ -1,0 +1,13 @@
+<div class="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-0 col-lg-4 lg-min-w-450px p30px">
+  <h2>Logging out...</h2>
+  <p>This page will redirect shortly.</p>
+</div>
+
+<script>
+    var logoutTab = window.open("<%= AppConfig[:idp_logout_url] %>");
+    logoutTab.opener = -null;
+    setTimeout(function () {
+        logoutTab.close();
+        window.location.replace("<%= AppConfig[:frontend_proxy_url] %>")
+    }, 1000);
+</script>

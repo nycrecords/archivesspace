@@ -11,6 +11,7 @@ ArchivesSpace::Application.routes.draw do
     match 'login' => "session#login", :via => :post
     match 'login' => "session#login_inline", :via => :get
     match 'logout' => "session#logout", :via => :get
+    match 'idp_logout' => "idp_logout#show", :via => :get
     match 'select_user' => "session#select_user", :via => :get
     match 'become_user' => "session#become_user", :via => :post
     match 'check_session' => "session#check_session", :via => :get
