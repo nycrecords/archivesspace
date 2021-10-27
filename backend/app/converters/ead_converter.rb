@@ -914,7 +914,8 @@ class EADConverter < Converter
       'genreform' => 'genre_form',
       'geogname' => 'geographic',
       'occupation' => 'occupation',
-      'subject' => 'topical'
+      'subject' => 'topical',
+      'title' => 'uniform_title'
       }.each do |tag, type|
         with "controlaccess/#{tag}" do |*|
           make :subject, {
@@ -947,7 +948,6 @@ class EADConverter < Converter
           :xlink_actuate_attribute => att('actuate'),
           :xlink_show_attribute => att('show'),
           :publish => att('audience') != 'internal',
-          :caption => att( 'title' )
         }
         set ancestor(:instance), :digital_object, obj
       end
@@ -1013,7 +1013,6 @@ class EADConverter < Converter
            fv_attrs[:file_uri] = daoloc['xlink:href'] if daoloc['xlink:href']
            fv_attrs[:use_statement] = daoloc['xlink:role'] if daoloc['xlink:role']
            fv_attrs[:publish] = daoloc['audience'] != 'internal'
-           fv_attrs[:caption] = daoloc['xlink:title'] if daoloc['xlink:title']
 
            obj.file_versions << fv_attrs
          end
