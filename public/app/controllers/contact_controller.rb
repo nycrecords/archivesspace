@@ -127,10 +127,8 @@ class ContactController < ApplicationController
         body email_body
       end
     end
-    Mail.defaults do
-      delivery_method :smtp, AppConfig[:smtp_settings]
-    end
     mail.deliver
+
     redirect_to action: 'show'
   end
 end
