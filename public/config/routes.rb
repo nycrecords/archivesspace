@@ -56,6 +56,7 @@ Rails.application.routes.draw do
     #CLASSIFICATIONS
     get  "classifications/:slug_or_id"  => 'classifications#show'
     get "repositories/:repo_slug/classifications/:slug_or_id"  => 'classifications#show'
+    get  "repositories/:rid/classifications/:id/linked_records" => 'classifications#linked_records'
 
     get 'classifications/search' => 'classifications#search'
     get 'classifications' => 'classifications#index'
