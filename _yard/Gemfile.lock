@@ -3,11 +3,12 @@ GEM
   specs:
     kramdown (2.3.0)
       rexml
-    rexml (3.2.4)
+    rexml (3.2.5)
     yard (0.9.25)
 
 PLATFORMS
   java
+  x86_64-linux
 
 DEPENDENCIES
   kramdown
