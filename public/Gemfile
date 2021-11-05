@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-gem 'rails', '5.2.4.3'
+gem 'rails', '5.2.4.4'
 
 # For handling HTML enities when processing exports as XML
 gem 'htmlentities', '~> 4.3', '>= 4.3.4'
@@ -31,8 +31,8 @@ gem 'coffee-rails', '4.2.2'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-gem 'excon', '>= 0.71.0'
-gem 'json', '2.2.0'
+gem 'excon', '>= 0.76.0'
+gem 'json', '2.3.0'
 gem 'json-schema', '1.0.10'
 gem 'multipart-post', '1.2.0'
 gem 'net-http-persistent', '2.8'
@@ -50,7 +50,7 @@ gem 'listen', group: :development
 gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
 group :development, :test do
-  gem 'pry', '~> 0.11.3'
+  gem 'pry', '~> 0.12.2'
   gem 'pry-nav'
   gem 'pry-rails'
   gem 'rubocop', '~> 0.72.0', require: false
@@ -70,3 +70,7 @@ group :test do
   gem 'selenium-webdriver', '~> 3.142', '>= 3.142.3'
   gem 'simplecov', '0.7.1'
 end
+
+# Allow plugins to provide their own Gemfiles too.
+require 'asutils'
+ASUtils.load_plugin_gems(self)

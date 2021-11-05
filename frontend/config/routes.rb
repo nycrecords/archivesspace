@@ -115,11 +115,6 @@ ArchivesSpace::Application.routes.draw do
     match 'resources/:id/transfer' => 'resources#transfer', :via => [:post]
     match 'resources/:rid/getbulkfile' => 'bulk_import#get_file', :via => [:post]
     match 'resources/:rid/getbulkfile' => 'bulk_import#get_file', :via => [:get]
-    match 'resources/:id/uploadbulkfile' => 'bulk_import#submit_file', :via => [:post]
-    
-
-    
-
 
     match 'resources/:id/tree/root' => 'resources#tree_root', :via => [:get]
     match 'resources/:id/tree/node' => 'resources#tree_node', :via => [:get]
@@ -206,6 +201,7 @@ ArchivesSpace::Application.routes.draw do
     match 'resolve/readonly' => 'resolver#resolve_readonly', :via => [:get]
 
     match 'enumerations/list' => 'enumerations#list', :via => [:get]
+    match 'enumerations/csv' => 'enumerations#csv', :via => [:get]
     match 'enumerations/delete' => 'enumerations#delete', :via => [:get]
     match 'enumerations/set_default/:id' => 'enumerations#set_default', :via => [:post]
     match 'enumerations/destroy/:id' => 'enumerations#destroy', :via => [:post]
@@ -240,6 +236,7 @@ ArchivesSpace::Application.routes.draw do
 
     resources :preferences
     match 'preferences/:id' => 'preferences#update', :via => [:post]
+    match 'preferences/:id/reset' => 'preferences#reset', :via => [:post]
 
     resources :rde_templates
     match 'rde_templates/batch_delete' => 'rde_templates#batch_delete', :via => [:post]

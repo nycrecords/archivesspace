@@ -414,7 +414,12 @@ class IndexerCommon
         doc['floor'] = record['record']['floor']
         doc['room'] = record['record']['room']
         doc['area'] = record['record']['area']
-      end
+       if record['record']['owner_repo']
+         repo = JSONModel::HTTP.get_json(record['record']['owner_repo']['ref'])
+          doc['owner_repo_uri_u_sstr'] = record['record']['owner_repo']['ref']
+          doc['owner_repo_display_string_u_ssort'] = repo["repo_code"]
+       end
+       end
     }
 
     add_document_prepare_hook {|doc, record|
@@ -556,7 +561,7 @@ class IndexerCommon
         doc['time_started'] = Time.parse(record['record']['time_started']).getlocal if record['record']['time_started']
         doc['time_finished'] = Time.parse(record['record']['time_finished']).getlocal if record['record']['time_finished']
 
-        filenames = record['record']['job']['filenames'] || []
+        filenames = record['record']['job']['filenames'] || [record['record']['job']['filename']].compact
         doc['files'] = []
         doc['job_data'] = []
         files = JSONModel::HTTP::get_json("#{record['record']['uri']}/output_files")
@@ -767,13 +772,15 @@ class IndexerCommon
       cm = record['record']['collection_management']
       if cm
         parent_type = JSONModel.parse_reference(record['uri'])[:type]
+        title = record['record']['title'] || record['record']['display_string']
         docs << {
           'id' => cm['uri'],
           'uri' => cm['uri'],
           'parent_id' => record['uri'],
-          'parent_title' => record['record']['title'] || record['record']['display_string'],
+          'parent_title' => title,
           'parent_type' => parent_type,
-          'title' => record['record']['title'] || record['record']['display_string'],
+          'title' => title,
+          'title_sort' => clean_for_sort(title),
           'types' => ['collection_management'],
           'primary_type' => 'collection_management',
           'json' => cm.to_json(:max_nesting => false),

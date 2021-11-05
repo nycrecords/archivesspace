@@ -5,6 +5,9 @@ en:
     automate: Automatically generate
     batch: Batch
     browse: Browse
+    bulk_import: Load via Spreadsheet
+    bulk_import_job: Load via Spreadsheet
+    download_bulk_import_report: Download report
     cancel: Cancel
     close: Close
     continue: Continue
@@ -81,6 +84,9 @@ en:
     delete_multiple: Delete Records
     delete_multiple_confirm_title: Delete Records?
     delete_multiple_confirm_message: "<p>Please be aware <strong>you cannot undo this action</strong>.</p><p>This action will remove these records from the database, including any references they have to other records.</p>"
+    reset: Reset Defaults
+    reset_confirm_title: "Reset %{preftype} to application defaults?"
+    reset_confirm_message: "<p>Please be aware <strong>you cannot undo this action</strong>.</p><p>This action will reset preferences to application defaults.</p>"
     edit_multiple: Edit Records
     edit_multiple_confirm_title: Edit Records?
     edit_multiple_confirm_message: "<p>This will bulk update multiple records.</p>"
@@ -198,7 +204,7 @@ en:
       level: Level
       identifier: Identifier
       resource_type: Resource Type
-      language: Language
+      langcode: Language of Materials
       restrictions: Restrictions
       ead_id: EAD ID
       finding_aid_status: Finding Aid Status
@@ -222,7 +228,7 @@ en:
       ref_id: Ref ID
       level: Level
       audit_info: Audit Information
-      language: Language
+      langcode: Language of Materials
       dates: Dates
       extents: Extent
       user_mtime: Modified
@@ -250,7 +256,7 @@ en:
       digital_object_id: Digital Object ID
       restrictions: Restrictions
       audit_info: Audit Information
-      language: Language
+      langcode: Language of Materials
       dates: Dates
       extents: Extent
       user_mtime: Modified
@@ -263,7 +269,7 @@ en:
       publish: Published
       context: Found in
       audit_info: Audit Information
-      language: Language
+      langcode: Language of Materials
       dates: Dates
       extents: Extent
       user_mtime: Modified
@@ -294,6 +300,8 @@ en:
       area: Area
       location_holdings: Holdings for Current Repository
       location_profile_display_string_u_ssort: Location Profile
+      owner_repo_display_string_u_ssort: Repository
+      none: None
       audit_info: Audit Information
       temporary: Temporary
       user_mtime: Modified
@@ -330,6 +338,7 @@ en:
       title: Title
       publish: Published
       has_classification_terms: Has classification terms?
+      identifier: Identifier
       audit_info: Audit Information
       user_mtime: Modified
       create_time: Created
@@ -437,8 +446,11 @@ en:
       create_time: Created
       dates: Dates
       extents: Extent
+      langcode: Language of Materials
       asc: Ascending
       desc: Descending
+    blank_facet_query_fields:
+      owner_repo_display_string_u_ssort: Repository
 
 
   advanced_search:
@@ -866,6 +878,7 @@ en:
         create_value: Create Value
         delete_value: Delete Value
         merge_value: Merge Value
+        download_csv: Download CSV
 
   event:
     _frontend:
@@ -1089,7 +1102,11 @@ en:
   preference:
     _frontend:
       messages:
-        updated: "Preferences updated"
+        updated: Preferences updated
+        reset: Preferences set to application defaults
+        reset_error: "Unable to reset preferences due to an error: %{exception}"
+      action:
+        save: Save Preferences
 
   rights_statement:
     _frontend:
@@ -1743,11 +1760,19 @@ en:
         import: Import from SpreadSheet
         drag_drop: Drag and drop file here
         clip_btn: Copy to Clipboard
+        only_validate: Only validate
       messages:
         missing_file: You have not added a file
         not_excel: The file you have chosen is not an Excel Spreadsheet
+        not_excel_csv: The file you have chosen is neither an Excel Spreadsheet nor a CSV file
         processed: The file has been processed
         error: "ERROR: Error(s) detected: "
         copied: Copied!
         uncopied: Unable to copy
-
+        submitted: "<p>Job had been submitted to Background Jobs. <br/> Click 'Close' to refresh this screen.</p>"
+  bulk_import_job:
+    active: "There is a bulk import job active for this record, try editing later: <a href ='%{url}'>%{uri}</a>"
+    resource_id: Resource ID
+    format: Download File Format
+    filename: Spreadsheet file name
+    not_direct: At this time, this job can only be created from the Resource record

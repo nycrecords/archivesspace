@@ -5,6 +5,7 @@ require 'action_controller/railtie'
 require 'action_view/railtie'
 require 'sprockets/railtie'
 require 'action_mailer/railtie'
+require 'mail'
 
 require 'asutils'
 require_relative 'initializers/plugins'
@@ -97,6 +98,9 @@ module ArchivesSpacePublic
       config.action_mailer.perform_deliveries = false
     end
 
+    Mail.defaults do
+      delivery_method :smtp, AppConfig[:smtp_settings]
+    end
   end
 end
 

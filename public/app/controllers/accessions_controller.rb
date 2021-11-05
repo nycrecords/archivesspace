@@ -47,6 +47,7 @@ class AccessionsController <  ApplicationController
       redirect_back(fallback_location: '/') and return
     end
 
+    @context = repo_context(@repo_id, 'accession')
     if @results['total_hits'] > 1
       @search[:dates_within] = true if params.fetch(:filter_from_year,'').blank? && params.fetch(:filter_to_year,'').blank?
       @search[:text_within] = true
@@ -92,8 +93,16 @@ class AccessionsController <  ApplicationController
       @result =  archivesspace.get_record(uri, @criteria)
       @page_title = @result.display_string
       @context = []
-      @context.unshift({:uri => @result.resolved_repository['uri'], :crumb =>  @result.resolved_repository['name']})
-      @context.push({:uri => '', :crumb => @result.display_string })
+      @context.unshift({
+        :uri => @result.resolved_repository['uri'],
+        :crumb => @result.resolved_repository['name'],
+        :type => 'repository'
+      })
+      @context.push({
+        :uri => '',
+        :crumb => @result.display_string,
+        :type => 'accession'
+      })
       fill_request_info
     rescue RecordNotFound
       record_not_found(uri, 'accession')

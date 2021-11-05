@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
 
   set_access_control "view_repository" => [:index, :show, :log, :status, :records, :download_file ]
-  set_access_control "create_job" => [:new, :create, :create_import_job]
+  set_access_control "create_job" => [:new, :create]
   set_access_control "cancel_job" => [:cancel]
   
   include ExportHelper
@@ -107,7 +107,9 @@ class JobsController < ApplicationController
   def download_file
     @job = JSONModel(:job).find(params[:job_id], "resolve[]" => "repository")
     
-    if @job.job.has_key?("format") && !@job.job["format"].blank? 
+    if params[:ext]
+        format = params[:ext].delete_prefix('.')
+    elsif @job.job.has_key?("format") && !@job.job["format"].blank?
         format = @job.job["format"]
     else
         format = "pdf"
@@ -122,7 +124,7 @@ class JobsController < ApplicationController
     end
 
     url = "/repositories/#{JSONModel::repository}/jobs/#{params[:job_id]}/output_files/#{params[:id]}"
-    stream_file(url, {:format => format, :filename => "job_#{params[:job_id].to_s}_#{filename_end}" } ) 
+    stream_file(url, {:format => format, :filename => "job_#{params[:job_id].to_s}_#{filename_end}" } )
   end
   
   
