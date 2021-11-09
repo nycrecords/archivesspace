@@ -129,6 +129,6 @@ class ContactController < ApplicationController
     end
     mail.deliver
 
-    redirect_to action: 'show'
+    redirect_to action: 'show', confirmation: 'true'
   end
 end
