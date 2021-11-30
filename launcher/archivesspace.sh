@@ -52,8 +52,9 @@ function readlink_dash_f {
     return 0
 }
 
-
-
+# Set JVM memory settings
+export ASPACE_JAVA_XMX="-Xms8192m -Xmx16384m"
+export ASPACE_JAVA_XSS="-Xss64m"
 
 cd "`dirname $0`"
 
@@ -98,15 +99,15 @@ export JAVA_OPTS="-Darchivesspace-daemon=yes $JAVA_OPTS -Djava.security.egd=file
 export JAVA_OPTS="`echo $JAVA_OPTS | sed 's/\([#&;\`|*?~<>^(){}$\,]\)/\\\\\1/g'`"
 
 if [ "$ASPACE_JAVA_XMX" = "" ]; then
-    ASPACE_JAVA_XMX="-Xmx1024m"
+    ASPACE_JAVA_XMX="-Xms8192m -Xmx16384m"
 fi
 
 if [ "$ASPACE_JAVA_XSS" = "" ]; then
-    ASPACE_JAVA_XSS="-Xss2m"
+    ASPACE_JAVA_XSS="-Xss64m"
 fi
 
 if [ "$ASPACE_GC_OPTS" = "" ]; then
-    ASPACE_GC_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:NewRatio=1"
+    ASPACE_GC_OPTS="-XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC -XX:NewRatio=1 -XX:ReservedCodeCacheSize=256m"
 fi
 
 
