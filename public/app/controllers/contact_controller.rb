@@ -3,6 +3,7 @@ class ContactController < ApplicationController
   include ViewHelper
   include ActionView::Helpers::TextHelper
   include ResultInfo
+  include HTTParty
   helper_method :process_repo_info
   helper_method :process_subjects
   helper_method :process_agents
@@ -91,6 +92,21 @@ class ContactController < ApplicationController
   end
 
   def compose
+    if AppConfig[:recaptcha_enabled]
+      begin
+        # Verify recaptcha response and return error if failed
+        url = 'https://www.google.com/recaptcha/api/siteverify?secret=%s&response=%s' %
+              [AppConfig[:recaptcha_private_key], params[:'g-recaptcha-response']]
+        recaptcha_response = HTTParty.post(url)
+        recaptcha_response = JSON.parse(recaptcha_response.body)
+        if recaptcha_response['success'] == false || recaptcha_response['score'] < AppConfig[:recaptcha_threshold]
+          redirect_to action: 'show', recaptcha_error: 'true' and return
+        end
+      rescue
+        redirect_to action: 'show', recaptcha_error: 'true' and return
+      end
+    end
+
     email_body = ''
     name = params[:name].html_safe
     email = params[:email_address]
